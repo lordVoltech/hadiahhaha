@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise Gift Box</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pastel-pink: #ffd1dc;
+            --pastel-purple: #e0bbe4;
+            --pastel-blue: #b2cefe;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-purple), var(--pastel-blue));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Props Latar Belakang */
+        .prop {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Kotak Kado */
+        .gift-container {
+            position: relative;
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            /* Kotak diturunkan sedikit ke bawah agar isi lebih terfokus */
+            transform: translateY(80px);
+        }
+
+        .gift-container:hover {
+            transform: translateY(80px) scale(1.05);
+        }
+
+        .gift-box {
+            position: relative;
+            width: 200px;
+            height: 180px;
+            background: #ff85a2;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Pita */
+        .gift-box::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: #ffffff;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .lid {
+            position: absolute;
+            width: 220px;
+            height: 50px;
+            background: #ff85a2;
+            top: -45px;
+            left: -10px;
+            border-radius: 5px;
+            z-index: 2;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .lid::before {
+            content: '';
+            position: absolute;
+            width: 30px;
+            height: 100%;
+            background: #ffffff;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* Isi Kado */
+        .content {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            width: 300px;
+            text-align: center;
+            opacity: 0;
+            transition: all 0.8s ease 0.3s;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .boneka {
+            width: 150px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+            order: 2; /* Boneka di bawah */
+        }
+
+        .message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            color: #d63384;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
+            margin-bottom: 10px; /* Jarak ke GIF di bawahnya */
+            order: 1; /* Tulisan di atas */
+        }
+
+        /* State Terbuka */
+        .gift-container.open .lid {
+            transform: translateY(-200px) rotate(-15deg);
+            opacity: 0;
+        }
+
+        .gift-container.open .content {
+            /* Menaikkan konten lebih tinggi saat terbuka */
+            transform: translateX(-50%) translateY(-280px) scale(1.1);
+            opacity: 1;
+        }
+
+        .gift-container.open .gift-box {
+            background: rgba(255, 133, 162, 0.4);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .instruction {
+            margin-top: 20px;
+            font-weight: 600;
+            color: #888;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+        }
+
+        .open .instruction {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="props-container"></div>
+
+    <div class="gift-container" id="mainGift" onclick="openBox()">
+        <div class="content" id="giftContent">
+            <!-- Tulisan sekarang di atas GIF -->
+            <div class="message" id="textMessage">doorprize sayangku~</div>
+            <!-- GIPHY / Cute Doll Image -->
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG5uY2R1N2x0amV4ZWZ2bWlwaXF3dmRxeW5yeXR6ZmltOHh6dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Xev9X4L9997r096bY8/giphy.gif" alt="Cute Doll" class="boneka">
+        </div>
+        
+        <div class="lid"></div>
+        <div class="gift-box"></div>
+        
+        <div class="instruction text-center w-full" id="instructionText">klik</div>
+    </div>
+
+    <script>
+        function openBox() {
+            const container = document.getElementById('mainGift');
+            if (!container.classList.contains('open')) {
+                container.classList.add('open');
+                createExplosion();
+            }
+        }
+
+        function createProps() {
+            const container = document.getElementById('props-container');
+            const icons = ['❤️', '✨', '🌸', '⭐', '☁️'];
+            
+            for (let i = 0; i < 30; i++) {
+                const prop = document.createElement('div');
+                prop.className = 'prop';
+                prop.innerText = icons[Math.floor(Math.random() * icons.length)];
+                
+                const size = Math.random() * 20 + 10;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 10 + 5;
+                const delay = Math.random() * 5;
+
+                prop.style.fontSize = `${size}px`;
+                prop.style.left = `${left}vw`;
+                prop.style.bottom = `-50px`;
+                prop.style.animation = `float ${duration}s linear ${delay}s infinite`;
+                
+                container.appendChild(prop);
+            }
+        }
+
+        function createExplosion() {
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'absolute z-50';
+                confetti.style.left = '50%';
+                confetti.style.top = '50%';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 75%)`;
+                confetti.style.borderRadius = '50%';
+                
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = Math.random() * 200 + 100;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+                
+                document.body.appendChild(confetti);
+                
+                confetti.animate([
+                    { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                    { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }
+                ], {
+                    duration: 1000,
+                    easing: 'cubic-bezier(0, .9, .57, 1)'
+                }).onfinish = () => confetti.remove();
+            }
+        }
+
+        window.onload = createProps;
+    </script>
+</body>
+</html>
