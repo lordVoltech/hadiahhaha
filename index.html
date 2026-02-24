@@ -52,12 +52,11 @@
             z-index: 10;
             cursor: pointer;
             transition: transform 0.3s ease;
-            /* Kotak diturunkan sedikit ke bawah agar isi lebih terfokus */
-            transform: translateY(80px);
+            transform: translateY(50px);
         }
 
         .gift-container:hover {
-            transform: translateY(80px) scale(1.05);
+            transform: translateY(50px) scale(1.02);
         }
 
         .gift-box {
@@ -68,6 +67,7 @@
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         /* Pita */
@@ -123,7 +123,7 @@
         .boneka {
             width: 150px;
             filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
-            order: 2; /* Boneka di bawah */
+            order: 2;
         }
 
         .message {
@@ -131,26 +131,29 @@
             font-size: 2.5rem;
             color: #d63384;
             text-shadow: 2px 2px 4px rgba(255,255,255,0.5);
-            margin-bottom: 10px; /* Jarak ke GIF di bawahnya */
-            order: 1; /* Tulisan di atas */
+            margin-bottom: 10px;
+            order: 1;
         }
 
         /* State Terbuka */
         .gift-container.open .lid {
-            transform: translateY(-200px) rotate(-15deg);
+            /* Tutup kotak melayang ke atas lalu menghilang */
+            transform: translateY(-250px) rotate(-15deg);
             opacity: 0;
         }
 
-        .gift-container.open .content {
-            /* Menaikkan konten lebih tinggi saat terbuka */
-            transform: translateX(-50%) translateY(-280px) scale(1.1);
-            opacity: 1;
-        }
-
         .gift-container.open .gift-box {
-            background: rgba(255, 133, 162, 0.4);
+            /* Kotak turun ke bawah saat dibuka (setengah badan) */
+            transform: translateY(120px);
+            background: rgba(255, 133, 162, 0.5);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .gift-container.open .content {
+            /* Konten muncul di posisi yang nyaman dilihat */
+            transform: translateX(-50%) translateY(-220px) scale(1.1);
+            opacity: 1;
         }
 
         .instruction {
@@ -161,10 +164,13 @@
             text-transform: uppercase;
             font-size: 0.9rem;
             transition: opacity 0.3s;
+            /* Memastikan instruksi ikut turun dengan animasi yang sama */
+            transition: all 1s ease;
         }
 
         .open .instruction {
             opacity: 0;
+            transform: translateY(100px);
         }
     </style>
 </head>
@@ -174,9 +180,7 @@
 
     <div class="gift-container" id="mainGift" onclick="openBox()">
         <div class="content" id="giftContent">
-            <!-- Tulisan sekarang di atas GIF -->
             <div class="message" id="textMessage">doorprize sayangku~</div>
-            <!-- GIPHY / Cute Doll Image -->
             <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG5uY2R1N2x0amV4ZWZ2bWlwaXF3dmRxeW5yeXR6ZmltOHh6dyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/Xev9X4L9997r096bY8/giphy.gif" alt="Cute Doll" class="boneka">
         </div>
         
