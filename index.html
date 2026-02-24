@@ -18,11 +18,12 @@
             font-family: 'Quicksand', sans-serif;
             background-color: var(--bg-color);
             overflow: hidden;
-            height: 100vh;
+            height: 100dvh; /* Menggunakan dvh untuk mobile browser */
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            touch-action: manipulation;
         }
 
         /* Props Latar Belakang (Lope-lope) */
@@ -30,7 +31,6 @@
             position: absolute;
             pointer-events: none;
             z-index: 1;
-            /* Dibuat lebih kelihatan (opacity tinggi) */
             opacity: 0.8; 
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
         }
@@ -48,29 +48,30 @@
             z-index: 10;
             cursor: pointer;
             transition: transform 0.3s ease;
-            transform: translateY(50px);
-        }
-
-        .gift-container:hover {
-            transform: translateY(50px) scale(1.02);
+            transform: translateY(10vh); /* Menyesuaikan posisi awal terhadap tinggi layar */
         }
 
         .gift-box {
             position: relative;
-            width: 200px;
-            height: 180px;
+            width: 180px;
+            height: 160px;
             background: var(--box-pink);
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
-            box-shadow: 0 15px 40px rgba(214, 51, 132, 0.2);
+            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.2);
             transition: all 1s cubic-bezier(0.4, 0, 0.2, 1);
+            margin: 0 auto;
+        }
+
+        @media (min-width: 640px) {
+            .gift-box { width: 200px; height: 180px; }
         }
 
         /* Pita */
         .gift-box::before {
             content: '';
             position: absolute;
-            width: 35px;
+            width: 30px;
             height: 100%;
             background: var(--ribbon-color);
             left: 50%;
@@ -79,10 +80,10 @@
 
         .lid {
             position: absolute;
-            width: 220px;
-            height: 55px;
+            width: 200px;
+            height: 50px;
             background: var(--box-pink);
-            top: -50px;
+            top: -45px;
             left: -10px;
             border-radius: 8px;
             z-index: 2;
@@ -90,10 +91,14 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.08);
         }
 
+        @media (min-width: 640px) {
+            .lid { width: 220px; height: 55px; top: -50px; }
+        }
+
         .lid::before {
             content: '';
             position: absolute;
-            width: 35px;
+            width: 30px;
             height: 100%;
             background: var(--ribbon-color);
             left: 50%;
@@ -106,7 +111,8 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%) scale(0);
-            width: 300px;
+            width: 90vw;
+            max-width: 350px;
             text-align: center;
             opacity: 0;
             transition: all 0.8s ease 0.3s;
@@ -117,37 +123,51 @@
         }
 
         .boneka {
-            width: 160px;
+            width: 140px;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
             order: 2;
         }
 
+        @media (min-width: 640px) {
+            .boneka { width: 160px; }
+        }
+
         .message {
             font-family: 'Dancing Script', cursive;
-            font-size: 2.8rem;
+            font-size: 1.8rem; /* Lebih kecil untuk mobile */
+            line-height: 1.2;
             color: var(--text-main);
             margin-bottom: 15px;
             order: 1;
+            padding: 0 10px;
+        }
+
+        @media (min-width: 640px) {
+            .message { font-size: 2.5rem; }
         }
 
         /* State Terbuka */
         .gift-container.open .lid {
-            transform: translateY(-280px) rotate(-20deg);
+            transform: translateY(-200px) rotate(-20deg);
             opacity: 0;
         }
 
         .gift-container.open .gift-box {
-            /* Kotak turun setengah badan */
-            transform: translateY(130px);
-            background: rgba(255, 133, 162, 0.3);
+            transform: translateY(15vh);
+            background: rgba(255, 133, 162, 0.2);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: none;
         }
 
         .gift-container.open .content {
-            transform: translateX(-50%) translateY(-240px) scale(1.1);
+            /* Posisi konten naik ke tengah layar */
+            transform: translateX(-50%) translateY(-35vh) scale(1);
             opacity: 1;
+        }
+
+        @media (min-width: 640px) {
+            .gift-container.open .content { transform: translateX(-50%) translateY(-240px) scale(1.1); }
         }
 
         .instruction {
@@ -168,7 +188,6 @@
 </head>
 <body>
 
-    <!-- Container untuk prop lope-lope -->
     <div id="props-container"></div>
 
     <div class="gift-container" id="mainGift" onclick="openBox()">
@@ -192,18 +211,18 @@
             }
         }
 
-        // Fungsi membuat props lope-lope yang lebih bagus
         function createProps() {
             const container = document.getElementById('props-container');
-            // Menambah variasi lope-lope
             const icons = ['❤️', '💖', '💕', '💗', '💓', '✨'];
             
-            for (let i = 0; i < 35; i++) {
+            const count = window.innerWidth < 640 ? 20 : 35; // Kurangi jumlah di mobile agar ringan
+            
+            for (let i = 0; i < count; i++) {
                 const prop = document.createElement('div');
                 prop.className = 'prop';
                 prop.innerText = icons[Math.floor(Math.random() * icons.length)];
                 
-                const size = Math.random() * 25 + 15; // Ukuran sedikit lebih besar
+                const size = Math.random() * (window.innerWidth < 640 ? 15 : 25) + 15;
                 const left = Math.random() * 100;
                 const duration = Math.random() * 8 + 6;
                 const delay = Math.random() * 10;
@@ -218,22 +237,21 @@
         }
 
         function createExplosion() {
-            // Partikel ledakan saat kotak dibuka
-            for (let i = 0; i < 60; i++) {
+            const count = window.innerWidth < 640 ? 40 : 60;
+            for (let i = 0; i < count; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'absolute z-50 pointer-events-none';
                 particle.style.left = '50%';
                 particle.style.top = '50%';
-                particle.style.width = '8px';
-                particle.style.height = '8px';
+                particle.style.width = '6px';
+                particle.style.height = '6px';
                 
-                // Warna-warna pastel untuk ledakan
                 const colors = ['#ff85a2', '#ffd1dc', '#e0bbe4', '#b2cefe', '#ff4d6d'];
                 particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
                 particle.style.borderRadius = '50%';
                 
                 const angle = Math.random() * Math.PI * 2;
-                const velocity = Math.random() * 250 + 150;
+                const velocity = Math.random() * (window.innerWidth < 640 ? 150 : 250) + 100;
                 const tx = Math.cos(angle) * velocity;
                 const ty = Math.sin(angle) * velocity;
                 
